@@ -61,7 +61,6 @@ import TermCondition from './pages/termCondition'
 // const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 const adminData = localStorage.getItem('token');
-console.log("adminData", adminData)
 const routes = [
   { path: '/admin', exact: true, element: () => <Navigate replace to={!adminData ? "/admin/login" : "/admin/dashboard"} /> },
   { path: '/admin/dashboard', name: 'Dashboard', element: Dashboard },

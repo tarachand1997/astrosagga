@@ -4,11 +4,29 @@ export const LOGIN = "/login"
 export const LOGOUT = "/userLogout"
 
 export const CATEGORY = "/categories-list"
+export const DELETE_CATEGORY = "/categories_remove"
+
 export const SLIDERS = "/sliders"
+export const DELETE_SLIDER = "/sliders-remove"
+
 export const ASTROLOGER = "/astrologer"
+export const DELETE_ASTROLOGER = "/remove-astrologer"
+
 export const USERS = "/users"
+export const DELETE_USERS = "/users-remove"
+
 export const PRODUCTCATEGORY = "/product-category"
+export const DELETE_PRODUCTCATEGORY = "/product-category-remove"
+
 export const BLOGS = "/blogs"
+export const DELETE_BLOG = "/deleteBlogs"
+
 export const PRIVACYPOLICY = "/privacy-policy"
+export const DELETE_PRIVACYPOLICY = "/remove-privacy-policy"
+
 export const TERMCONDITION = "/terms-condition"
+export const DELETE_TERMCONDITION = "/remove-terms-condition"
+
 export const PRODUCTS = "/product"
+export const DELETE_PRODUCTS = "/remove-product"
+

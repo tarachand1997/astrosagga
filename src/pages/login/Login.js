@@ -26,10 +26,6 @@ const Login = () => {
   const [useName, setUserName] = useState("")
   const [password, setPassword] = useState("")
 
-  useEffect(() => {
-    console.log("loginData", loginData)
-  }, [loginData])
-
   const handleUserName = (e) => {
     setUserName(e.target.value)
   }
@@ -44,7 +40,7 @@ const Login = () => {
       email: useName,
       password
     }
-    console.log(dispatch(login(apiData, () => redirectToDashboard())));
+    dispatch(login(apiData, () => redirectToDashboard()));
   }
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">

@@ -9,6 +9,11 @@ export function saveLoginData(data) {
     }
 }
 
+const setLocalStorage = (loginData) => {
+    localStorage.setItem('token', loginData.data.api_access_token);
+    localStorage.setItem('userDetail', JSON.stringify(loginData.data));
+}
+
 export function login(data, callBack) {
     return async function (dispatch) {
         // dispatch(changeLoading(true));
@@ -22,12 +27,11 @@ export function login(data, callBack) {
             },
         }).then(function (response) {
             let loginData = response.data;
-            localStorage.setItem('token', loginData.api_access_token);
-            localStorage.setItem('userDetail', JSON.stringify(loginData));
+            setLocalStorage(loginData)
             dispatch(saveLoginData(loginData))
             callBack()
         }).catch(error => {
-            console.warn("totalpriceError", error);
+            console.warn("login", error);
             // dispatch(changeLoading());
         });
     }
@@ -53,7 +57,7 @@ export function logout(callBack) {
             localStorage.removeItem('userDetail');
             dispatch(logoutUser())
             // callBack()
-            console.warn("totalpriceError", error);
+            console.warn("logout", error);
             // dispatch(changeLoading());
         });
     }
