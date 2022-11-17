@@ -1,34 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react'
-import {
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCol,
-  CRow,
-  CTable,
-  CTableBody,
-  CTableCaption,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-  CButton,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-  CToast,
-  CToastBody,
-  CToastClose,
-  CToastHeader,
-  CToaster,
-} from '@coreui/react'
+import { CCard, CCardBody, CCardHeader, CCol, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow, CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CToast, CToastBody, CToastHeader, CToaster, CFormInput, CFormLabel, CForm, CFormTextarea } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilDelete } from '@coreui/icons'
+import { cilTrash, cilPlus } from '@coreui/icons'
 import { useSelector, useDispatch } from 'react-redux'
-import { getPrivacyPolicy, deletePrivacyPolicy } from '../../store/actions/adminAction'
-import { IMAGE_BASE_URL } from '../../store/WebApiUrl'
+import { getPrivacyPolicy, addPrivacyPolicy, deletePrivacyPolicy } from '../../store/actions/adminAction'
 
 const PrivacyPolicy = () => {
   const privacyPolicyList = useSelector((state) => state.admin.privacyPolicyList)
@@ -36,6 +11,8 @@ const PrivacyPolicy = () => {
   const [privacyPolicyData, setPrivacyPolicyData] = useState([]);
   const [visibleDelete, setVisibleDelete] = useState(false)
   const [selectedData, setSelectedData] = useState({})
+  const [visibleAdd, setVisibleAdd] = useState(false)
+  const [validated, setValidated] = useState(false)
   const [toast, addToast] = useState(0)
   const toaster = useRef()
 
@@ -84,12 +61,61 @@ const PrivacyPolicy = () => {
     addToast(successToast);
   }
 
+  const handleAdd = (event) => {
+    event.preventDefault()
+    const form = event.currentTarget
+    if (form.checkValidity() === false) {
+      event.stopPropagation()
+      setValidated(true)
+      return
+    }
+    let apiData = new FormData();
+    apiData.append("title", event.target.catName.value)
+    apiData.append("description", event.target.description.value)
+    dispatch(addPrivacyPolicy(apiData, (res) => handleAddResponse(res)))
+  }
+
+  const handleAddResponse = (response) => {
+    setVisibleAdd(false);
+    let successToast = (
+      <CToast title="Privacy Policy" autohide={true}>
+        <CToastHeader closeButton>
+          <svg
+            className="rounded me-2"
+            width="20"
+            height="20"
+            xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="xMidYMid slice"
+            focusable="false"
+            role="img"
+          >
+            <rect width="100%" height="100%" fill={response === "error" ? "red" : "#007aff"}></rect>
+          </svg>
+          <strong className="me-auto">Privacy Policy</strong>
+          <small>Just now</small>
+        </CToastHeader>
+        <CToastBody>{response === "error" ? "Privacy Policy Add Failed" : "Privacy Policy Added Successfully"}</CToastBody>
+      </CToast>
+    )
+    addToast(successToast);
+  }
+
   return (
     <CRow>
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
             <strong>Privacy Policy List</strong> <small></small>
+            <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+              <CButton
+                className='me-md-2 btn-sm'
+                color={"primary"}
+                onClick={() => setVisibleAdd(true)}
+              >
+                <CIcon icon={cilPlus} className="me-2" />
+                Add
+              </CButton>
+            </div>
           </CCardHeader>
           <CCardBody>
             {/* <p className="text-medium-emphasis small">
@@ -115,15 +141,7 @@ const PrivacyPolicy = () => {
                         <CTableDataCell>{item.title}</CTableDataCell>
                         <CTableDataCell>{item.status}</CTableDataCell>
                         <CTableDataCell>
-                          <CButton
-                            color="danger"
-                            // key={index}
-                            active={false}
-                            // disabled={state === 'disabled'}
-                            onClick={() => deleteModal(item)}
-                          >
-                            <CIcon icon={cilDelete} className="me-2" />
-                          </CButton>
+                          <CIcon onClick={() => deleteModal(item)} icon={cilTrash} className="me-2 danger" />
                         </CTableDataCell>
                       </CTableRow>
                     )
@@ -133,6 +151,56 @@ const PrivacyPolicy = () => {
             </CTable>
             {/* </DocsExample> */}
           </CCardBody>
+
+          {/* Add Modal */}
+          <CModal alignment="center" visible={visibleAdd} onClose={() => setVisibleAdd(false)}>
+            <CModalHeader>
+              <CModalTitle>Add</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+              <CForm
+                className="row g-3 needs-validation"
+                noValidate
+                validated={validated}
+                onSubmit={handleAdd}
+                encType="multipart/form-data"
+              >
+
+                <div className="mb-3">
+                  <CFormLabel htmlFor="validationDefault05">
+                    Title
+                  </CFormLabel>
+                  <CFormInput
+                    name='catName'
+                    id="validationDefault05"
+                    required
+                    type="text"
+                    placeholder="Enter Title"
+                    aria-label="default input example"
+                  />
+                </div>
+                <div className="mb-3">
+                  <CFormLabel htmlFor="validationTextarea" className="form-label">
+                    Description
+                  </CFormLabel>
+                  <CFormTextarea
+                    id="validationTextarea"
+                    name="description"
+                    placeholder="Description"
+                    // invalid
+                    required
+                  ></CFormTextarea>
+                </div>
+                <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                  <CButton type='submit' color="primary">Add</CButton>
+                  <CButton color="secondary" onClick={() => setVisibleAdd(false)}>
+                    Cancel
+                  </CButton>
+                </div>
+              </CForm>
+            </CModalBody>
+          </CModal>
+          {/* Add Modal */}
 
           {/* Delete Modal */}
           <CModal visible={visibleDelete} onClose={() => setVisibleDelete(false)}>

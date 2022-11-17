@@ -25,7 +25,7 @@ import {
   CToaster,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilDelete } from '@coreui/icons'
+import { cilTrash } from '@coreui/icons'
 import { useSelector, useDispatch } from 'react-redux'
 import { getUsers, deleteUsers } from '../../store/actions/adminAction'
 import { IMAGE_BASE_URL } from '../../store/WebApiUrl'
@@ -121,15 +121,7 @@ const Users = () => {
                         <CTableDataCell>{item.pincode}</CTableDataCell>
                         <CTableDataCell>{item.state}</CTableDataCell>
                         <CTableDataCell>
-                          <CButton
-                            color="danger"
-                            // key={index}
-                            active={false}
-                            // disabled={state === 'disabled'}
-                            onClick={() => deleteModal(item)}
-                          >
-                            <CIcon icon={cilDelete} className="me-2" />
-                          </CButton>
+                          <CIcon onClick={() => deleteModal(item)} icon={cilTrash} className="me-2 danger" />
                         </CTableDataCell>
                       </CTableRow>
                     )

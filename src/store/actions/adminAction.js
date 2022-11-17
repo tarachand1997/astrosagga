@@ -65,6 +65,28 @@ export function deleteCategory(data, callBack) {
     }
 }
 
+export function addCategory(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.ADD_CATEGORY}`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorizationkey': token
+            },
+            data: data
+        }).then(function (response) {
+            callBack("success")
+            dispatch(getCategory())
+        }).catch(error => {
+            callBack("error")
+            console.warn("addCategory", error);
+            // dispatch(changeLoading());
+        });
+    }
+}
+
 export function getSliders() {
     return async function (dispatch) {
         // dispatch(changeLoading(true));
@@ -109,6 +131,28 @@ export function deleteSliders(data, callBack) {
         }).catch(error => {
             callBack("error")
             console.warn("deleteSliders", error);
+            // dispatch(changeLoading());
+        });
+    }
+}
+
+export function addSliders(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.ADD_SLIDER}`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorizationkey': token
+            },
+            data: data
+        }).then(function (response) {
+            callBack("success")
+            dispatch(getSliders())
+        }).catch(error => {
+            callBack("error")
+            console.warn("addSliders", error);
             // dispatch(changeLoading());
         });
     }
@@ -259,6 +303,28 @@ export function deleteProductCategory(data, callBack) {
     }
 }
 
+export function addProductCategory(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.ADD_PRODUCTCATEGORY}`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorizationkey': token
+            },
+            data: data
+        }).then(function (response) {
+            callBack("success")
+            dispatch(getProductCategory())
+        }).catch(error => {
+            callBack("error")
+            console.warn("addProductCategory", error);
+            // dispatch(changeLoading());
+        });
+    }
+}
+
 export function getBlogList() {
     return async function (dispatch) {
         // dispatch(changeLoading(true));
@@ -303,6 +369,28 @@ export function deleteBlog(data, callBack) {
         }).catch(error => {
             callBack("error")
             console.warn("deleteBlog", error);
+            // dispatch(changeLoading());
+        });
+    }
+}
+
+export function addBlog(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.ADD_BLOG}`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorizationkey': token
+            },
+            data: data
+        }).then(function (response) {
+            callBack("success")
+            dispatch(getBlogList())
+        }).catch(error => {
+            callBack("error")
+            console.warn("addBlog", error);
             // dispatch(changeLoading());
         });
     }
@@ -406,6 +494,28 @@ export function deletePrivacyPolicy(data, callBack) {
     }
 }
 
+export function addPrivacyPolicy(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.ADD_PRIVACYPOLICY}`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorizationkey': token
+            },
+            data: data
+        }).then(function (response) {
+            callBack("success")
+            dispatch(getPrivacyPolicy())
+        }).catch(error => {
+            callBack("error")
+            console.warn("addPrivacyPolicy", error);
+            // dispatch(changeLoading());
+        });
+    }
+}
+
 export function getTermCondition() {
     return async function (dispatch) {
         // dispatch(changeLoading(true));
@@ -450,6 +560,27 @@ export function deleteTermCondition(data, callBack) {
         }).catch(error => {
             callBack("error")
             console.warn("deleteTermCondition", error);
+        });
+    }
+}
+
+export function addTermCondition(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.ADD_TERMCONDITION}`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorizationkey': token
+            },
+            data: data
+        }).then(function (response) {
+            callBack("success")
+            dispatch(getTermCondition())
+        }).catch(error => {
+            callBack("error")
+            console.warn("addTermCondition", error);
         });
     }
 }

@@ -1,33 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react'
-import {
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCol,
-  CRow,
-  CTable,
-  CTableBody,
-  CTableCaption,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-  CButton,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-  CToast,
-  CToastBody,
-  CToastClose,
-  CToastHeader,
-  CToaster,
-} from '@coreui/react'
+import { CCard, CCardBody, CCardHeader, CCol, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow, CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CToast, CToastBody, CToastHeader, CToaster, CFormInput, CFormLabel, CForm } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilDelete } from '@coreui/icons'
+import { cilTrash, cilPlus } from '@coreui/icons'
 import { useSelector, useDispatch } from 'react-redux'
-import { getSliders, deleteSliders } from '../../store/actions/adminAction'
+import { getSliders, addSliders, deleteSliders } from '../../store/actions/adminAction'
 import { IMAGE_BASE_URL } from '../../store/WebApiUrl'
 
 const Slider = () => {
@@ -36,6 +12,8 @@ const Slider = () => {
   const [sliderListData, setSliderListData] = useState([]);
   const [visibleDelete, setVisibleDelete] = useState(false)
   const [selectedData, setSelectedData] = useState({})
+  const [visibleAdd, setVisibleAdd] = useState(false)
+  const [validated, setValidated] = useState(false)
   const [toast, addToast] = useState(0)
   const toaster = useRef()
 
@@ -78,7 +56,46 @@ const Slider = () => {
           <strong className="me-auto">Slider</strong>
           <small>Just now</small>
         </CToastHeader>
-        <CToastBody>{response == "error" ? "Slider Deleted Failed" : "Slider Deleted Successfully"}</CToastBody>
+        <CToastBody>{response === "error" ? "Slider Deleted Failed" : "Slider Deleted Successfully"}</CToastBody>
+      </CToast>
+    )
+    addToast(successToast);
+  }
+
+  const handleAdd = (event) => {
+    event.preventDefault()
+    const form = event.currentTarget
+    if (form.checkValidity() === false) {
+      event.stopPropagation()
+      setValidated(true)
+      return
+    }
+    let apiData = new FormData();
+    apiData.append("name", event.target.catName.value)
+    apiData.append("image", event.target.catImage.files[0])
+    dispatch(addSliders(apiData, (res) => handleAddResponse(res)))
+  }
+
+  const handleAddResponse = (response) => {
+    setVisibleAdd(false);
+    let successToast = (
+      <CToast title="Slider" autohide={true}>
+        <CToastHeader closeButton>
+          <svg
+            className="rounded me-2"
+            width="20"
+            height="20"
+            xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="xMidYMid slice"
+            focusable="false"
+            role="img"
+          >
+            <rect width="100%" height="100%" fill={response === "error" ? "red" : "#007aff"}></rect>
+          </svg>
+          <strong className="me-auto">Slider</strong>
+          <small>Just now</small>
+        </CToastHeader>
+        <CToastBody>{response === "error" ? "Slider Add Failed" : "Slider Added Successfully"}</CToastBody>
       </CToast>
     )
     addToast(successToast);
@@ -90,6 +107,16 @@ const Slider = () => {
         <CCard className="mb-4">
           <CCardHeader>
             <strong>Slider List</strong> <small></small>
+            <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+              <CButton
+                className='me-md-2 btn-sm'
+                color={"primary"}
+                onClick={() => setVisibleAdd(true)}
+              >
+                <CIcon icon={cilPlus} className="me-2" />
+                Add
+              </CButton>
+            </div>
           </CCardHeader>
           <CCardBody>
             {/* <p className="text-medium-emphasis small">
@@ -117,15 +144,7 @@ const Slider = () => {
                           <img src={`${IMAGE_BASE_URL}${item.filePath}/${item.image}`} height="50" width="50" />
                         </CTableDataCell>
                         <CTableDataCell>
-                          <CButton
-                            color="danger"
-                            // key={index}
-                            active={false}
-                            // disabled={state === 'disabled'}
-                            onClick={() => deleteModal(item)}
-                          >
-                            <CIcon icon={cilDelete} className="me-2" />
-                          </CButton>
+                          <CIcon onClick={() => deleteModal(item)} icon={cilTrash} className="me-2 danger" />
                         </CTableDataCell>
                       </CTableRow>
                     )
@@ -135,6 +154,57 @@ const Slider = () => {
             </CTable>
             {/* </DocsExample> */}
           </CCardBody>
+
+          {/* Add Modal */}
+          <CModal alignment="center" visible={visibleAdd} onClose={() => setVisibleAdd(false)}>
+            <CModalHeader>
+              <CModalTitle>Add</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+              <CForm
+                className="row g-3 needs-validation"
+                noValidate
+                validated={validated}
+                onSubmit={handleAdd}
+                encType="multipart/form-data"
+              >
+
+                <div className="mb-3">
+                  <CFormLabel htmlFor="validationDefault05">
+                    Name
+                  </CFormLabel>
+                  <CFormInput
+                    name='catName'
+                    id="validationDefault05"
+                    required
+                    type="text"
+                    placeholder="Enter Name"
+                    aria-label="default input example"
+                  />
+                </div>
+                <div className="mb-3">
+                  <CFormLabel htmlFor="validationTextarea">
+                    Select Image
+                  </CFormLabel>
+                  <CFormInput
+                    name='catImage'
+                    type="file"
+                    id="validationTextarea"
+                    aria-label="file example"
+                    required
+                  />
+                  {/* <CFormFeedback invalid>Category Image Required</CFormFeedback> */}
+                </div>
+                <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                  <CButton type='submit' color="primary">Add</CButton>
+                  <CButton color="secondary" onClick={() => setVisibleAdd(false)}>
+                    Cancel
+                  </CButton>
+                </div>
+              </CForm>
+            </CModalBody>
+          </CModal>
+          {/* Add Modal */}
 
           {/* Delete Modal */}
           <CModal visible={visibleDelete} onClose={() => setVisibleDelete(false)}>
