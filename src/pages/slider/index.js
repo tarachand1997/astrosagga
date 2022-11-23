@@ -105,7 +105,7 @@ const Slider = () => {
     <CRow>
       <CCol xs={12}>
         <CCard className="mb-4">
-          <CCardHeader>
+          <CCardHeader className='d-md-flex'>
             <strong>Slider List</strong> <small></small>
             <div className="d-grid gap-2 d-md-flex justify-content-md-end">
               <CButton

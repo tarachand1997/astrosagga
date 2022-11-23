@@ -206,6 +206,27 @@ export function deleteAstrologer(data, callBack) {
     }
 }
 
+export function addAstrologer(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.ADD_ASTROLOGER}`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorizationkey': token
+            },
+            data: data
+        }).then(function (response) {
+            callBack("success")
+            dispatch(getAstrologer())
+        }).catch(error => {
+            callBack("error")
+            console.warn("addAstrologer", error);
+        });
+    }
+}
+
 export function getUsers() {
     return async function (dispatch) {
         // dispatch(changeLoading(true));
@@ -250,6 +271,27 @@ export function deleteUsers(data, callBack) {
         }).catch(error => {
             callBack("error")
             console.warn("deleteUsers", error);
+        });
+    }
+}
+
+export function addUsers(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.ADD_USERS}`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorizationkey': token
+            },
+            data: data
+        }).then(function (response) {
+            callBack("success")
+            dispatch(getUsers())
+        }).catch(error => {
+            callBack("error")
+            console.warn("addUsers", error);
         });
     }
 }
@@ -440,6 +482,28 @@ export function deleteProducts(data, callBack) {
         }).catch(error => {
             callBack("error")
             console.warn("deleteProducts", error);
+            // dispatch(changeLoading());
+        });
+    }
+}
+
+export function addProducts(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.ADD_PRODUCTS}`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorizationkey': token
+            },
+            data: data
+        }).then(function (response) {
+            callBack("success")
+            dispatch(getProducts())
+        }).catch(error => {
+            callBack("error")
+            console.warn("addProducts", error);
             // dispatch(changeLoading());
         });
     }

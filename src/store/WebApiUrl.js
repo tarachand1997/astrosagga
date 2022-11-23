@@ -13,9 +13,11 @@ export const ADD_SLIDER = "/sliders"
 
 export const ASTROLOGER = "/astrologer"
 export const DELETE_ASTROLOGER = "/remove-astrologer"
+export const ADD_ASTROLOGER = "/astrologer"
 
 export const USERS = "/users"
 export const DELETE_USERS = "/users-remove"
+export const ADD_USERS = "/users"
 
 export const PRODUCTCATEGORY = "/product-category"
 export const DELETE_PRODUCTCATEGORY = "/product-category-remove"
@@ -35,4 +37,5 @@ export const ADD_TERMCONDITION = "/terms-condition"
 
 export const PRODUCTS = "/product"
 export const DELETE_PRODUCTS = "/remove-product"
+export const ADD_PRODUCTS = "/product"
 

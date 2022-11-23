@@ -1,47 +1,27 @@
 import React, { useEffect, useState, useRef } from 'react'
-import {
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCol,
-  CRow,
-  CTable,
-  CTableBody,
-  CTableCaption,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-  CButton,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-  CToast,
-  CToastBody,
-  CToastClose,
-  CToastHeader,
-  CToaster,
-} from '@coreui/react'
+import { CCard, CCardBody, CCardHeader, CCol, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow, CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CToast, CToastBody, CToastHeader, CToaster, CFormInput, CFormLabel, CForm, CFormTextarea, CFormSelect } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilTrash } from '@coreui/icons'
+import { cilTrash, cilPlus } from '@coreui/icons'
 
 import { DocsExample } from '../../components'
 import { useSelector, useDispatch } from 'react-redux'
-import { getAstrologer, deleteAstrologer } from '../../store/actions/adminAction'
+import { getCategory, getAstrologer, addAstrologer, deleteAstrologer } from '../../store/actions/adminAction'
 import { IMAGE_BASE_URL } from '../../store/WebApiUrl'
 
 const Astrologer = () => {
   const astrologerList = useSelector((state) => state.admin.astrologerList)
+  const categoryList = useSelector((state) => state.admin.categoryList)
   const dispatch = useDispatch()
   const [astrologerData, setAstrologerData] = useState([]);
   const [visibleDelete, setVisibleDelete] = useState(false)
   const [selectedData, setSelectedData] = useState({})
+  const [visibleAdd, setVisibleAdd] = useState(false)
+  const [validated, setValidated] = useState(false)
   const [toast, addToast] = useState(0)
   const toaster = useRef()
 
   useEffect(() => {
+    dispatch(getCategory())
     dispatch(getAstrologer())
   }, [])
 
@@ -86,12 +66,75 @@ const Astrologer = () => {
     addToast(successToast);
   }
 
+  const handleAdd = (event) => {
+    event.preventDefault()
+    const form = event.currentTarget
+    if (form.checkValidity() === false) {
+      event.stopPropagation()
+      setValidated(true)
+      return
+    }
+    let apiData = new FormData();
+    apiData.append("catId", event.target.astCategory.value)
+    apiData.append("name", event.target.astName.value)
+    apiData.append("email", event.target.astEmail.value)
+    apiData.append("password", event.target.astPass.value)
+    apiData.append("mobile", event.target.astMobile.value)
+    apiData.append("experience", event.target.astExperience.value)
+    apiData.append("language", event.target.astLanguage.value)
+    apiData.append("pma", event.target.astPma.value)
+    apiData.append("basicDetail", event.target.astBasicD.value)
+    apiData.append("address", event.target.astAdd.value)
+    apiData.append("city", event.target.astCity.value)
+    apiData.append("state", event.target.astState.value)
+    apiData.append("country", event.target.astCountry.value)
+    apiData.append("pincode", event.target.astPincode.value)
+    apiData.append("image", event.target.astImage.files[0])
+    apiData.append("description", event.target.description.value)
+    dispatch(addAstrologer(apiData, (res) => handleAddResponse(res)))
+  }
+
+  const handleAddResponse = (response) => {
+    setVisibleAdd(false);
+    let successToast = (
+      <CToast title="Astrologer" autohide={true}>
+        <CToastHeader closeButton>
+          <svg
+            className="rounded me-2"
+            width="20"
+            height="20"
+            xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="xMidYMid slice"
+            focusable="false"
+            role="img"
+          >
+            <rect width="100%" height="100%" fill={response === "error" ? "red" : "#007aff"}></rect>
+          </svg>
+          <strong className="me-auto">Astrologer</strong>
+          <small>Just now</small>
+        </CToastHeader>
+        <CToastBody>{response === "error" ? "Astrologer Add Failed" : "Astrologer Added Successfully"}</CToastBody>
+      </CToast>
+    )
+    addToast(successToast);
+  }
+
   return (
     <CRow>
       <CCol xs={12}>
         <CCard className="mb-4">
-          <CCardHeader>
+          <CCardHeader className='d-md-flex'>
             <strong>Astrologer List</strong> <small></small>
+            <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+              <CButton
+                className='me-md-2 btn-sm'
+                color={"primary"}
+                onClick={() => setVisibleAdd(true)}
+              >
+                <CIcon icon={cilPlus} className="me-2" />
+                Add
+              </CButton>
+            </div>
           </CCardHeader>
           <CCardBody>
             {/* <p className="text-medium-emphasis small">
@@ -133,6 +176,240 @@ const Astrologer = () => {
             </CTable>
             {/* </DocsExample> */}
           </CCardBody>
+
+          {/* Add Modal */}
+          <CModal size='lg' visible={visibleAdd} onClose={() => setVisibleAdd(false)}>
+            <CModalHeader>
+              <CModalTitle>Add</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+              <CForm
+                className="row g-3 needs-validation"
+                noValidate
+                validated={validated}
+                onSubmit={handleAdd}
+                encType="multipart/form-data"
+              >
+
+                <div className='col-md-6'>
+                  <CFormLabel htmlFor="astCategory">
+                    Select Category
+                  </CFormLabel>
+
+                  <CFormSelect name='astCategory' id='astCategory' aria-label="Default select example">
+                    <option value="">Select Category</option>
+                    {
+                      categoryList.map((item) => {
+                        return <option value={item.id}>{item.name}</option>
+                      })
+                    }
+                  </CFormSelect>
+                </div>
+                <div className='col-md-6'>
+                  <CFormLabel htmlFor="astName">
+                    Name
+                  </CFormLabel>
+                  <CFormInput
+                    name='astName'
+                    id="astName"
+                    required
+                    type="text"
+                    placeholder="Enter Name"
+                    aria-label="default input example"
+                  />
+                </div>
+                <div className='col-md-6'>
+                  <CFormLabel htmlFor="astMobile">
+                    Mobile
+                  </CFormLabel>
+                  <CFormInput
+                    name='astMobile'
+                    id="astMobile"
+                    required
+                    type="number"
+                    placeholder="Enter Mobile"
+                    aria-label="default input example"
+                  />
+                </div>
+                <div className='col-md-6'>
+                  <CFormLabel htmlFor="astEmail">
+                    Email
+                  </CFormLabel>
+                  <CFormInput
+                    name='astEmail'
+                    id="astEmail"
+                    required
+                    type="email"
+                    placeholder="Enter Email"
+                    aria-label="default input example"
+                  />
+                </div>
+                <div className='col-md-6'>
+                  <CFormLabel htmlFor="astPass">
+                    Password
+                  </CFormLabel>
+                  <CFormInput
+                    name='astPass'
+                    id="astPass"
+                    required
+                    type="password"
+                    placeholder="Enter Password"
+                    aria-label="default input example"
+                  />
+                </div>
+                <div className='col-md-6'>
+                  <CFormLabel htmlFor="astExperience">
+                    Experience
+                  </CFormLabel>
+                  <CFormInput
+                    name='astExperience'
+                    id="astExperience"
+                    required
+                    type="text"
+                    placeholder="Enter Experience"
+                    aria-label="default input example"
+                  />
+                </div>
+                <div className='col-md-6'>
+                  <CFormLabel htmlFor="astLanguage">
+                    Language
+                  </CFormLabel>
+                  <CFormInput
+                    name='astLanguage'
+                    id="astLanguage"
+                    required
+                    type="text"
+                    placeholder="Enter Language"
+                    aria-label="default input example"
+                  />
+                </div>
+                <div className='col-md-6'>
+                  <CFormLabel htmlFor="astPma">
+                    PMA
+                  </CFormLabel>
+                  <CFormInput
+                    name='astPma'
+                    id="astPma"
+                    required
+                    type="text"
+                    placeholder="Enter PMA"
+                    aria-label="default input example"
+                  />
+                </div>
+                <div className='col-md-6'>
+                  <CFormLabel htmlFor="astBasicD">
+                    Basic Detail
+                  </CFormLabel>
+                  <CFormInput
+                    name='astBasicD'
+                    id="astBasicD"
+                    required
+                    type="text"
+                    placeholder="Enter Besic Detail"
+                    aria-label="default input example"
+                  />
+                </div>
+                <div className='col-md-6'>
+                  <CFormLabel htmlFor="astCountry">
+                    Country
+                  </CFormLabel>
+                  <CFormInput
+                    name='astCountry'
+                    id="astCountry"
+                    required
+                    type="text"
+                    placeholder="Enter Country"
+                    aria-label="default input example"
+                  />
+                </div>
+                <div className='col-md-6'>
+                  <CFormLabel htmlFor="astState">
+                    State
+                  </CFormLabel>
+                  <CFormInput
+                    name='astState'
+                    id="astState"
+                    required
+                    type="text"
+                    placeholder="Enter State"
+                    aria-label="default input example"
+                  />
+                </div>
+                <div className='col-md-6'>
+                  <CFormLabel htmlFor="astCity">
+                    City
+                  </CFormLabel>
+                  <CFormInput
+                    name='astCity'
+                    id="astCity"
+                    required
+                    type="text"
+                    placeholder="Enter City"
+                    aria-label="default input example"
+                  />
+                </div>
+                <div className='col-md-6'>
+                  <CFormLabel htmlFor="astPincode">
+                    Pincode
+                  </CFormLabel>
+                  <CFormInput
+                    name='astPincode'
+                    id="astPincode"
+                    required
+                    type="number"
+                    placeholder="Enter Pincode"
+                    aria-label="default input example"
+                  />
+                </div>
+                <div className='col-md-6'>
+                  <CFormLabel htmlFor="astAdd">
+                    Address
+                  </CFormLabel>
+                  <CFormTextarea
+                    name='astAdd'
+                    id="astAdd"
+                    required
+                    placeholder="Enter Address"
+                    aria-label="default input example"
+                    rows={1}
+                  ></CFormTextarea>
+                </div>
+                <div className='col-md-6'>
+                  <CFormLabel htmlFor="astImage">
+                    Select Image
+                  </CFormLabel>
+                  <CFormInput
+                    name='astImage'
+                    type="file"
+                    id="astImage"
+                    aria-label="file example"
+                    required
+                  />
+                  {/* <CFormFeedback invalid>Category Image Required</CFormFeedback> */}
+                </div>
+                <div className='col-md-6'>
+                  <CFormLabel htmlFor="astDes" className="form-label">
+                    Description
+                  </CFormLabel>
+                  <CFormTextarea
+                    id="astDes"
+                    name="description"
+                    placeholder="Description"
+                    // invalid
+                    required
+                    rows={4}
+                  ></CFormTextarea>
+                </div>
+                <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                  <CButton type='submit' color="primary">Add</CButton>
+                  <CButton color="secondary" onClick={() => setVisibleAdd(false)}>
+                    Cancel
+                  </CButton>
+                </div>
+              </CForm>
+            </CModalBody>
+          </CModal>
+          {/* Add Modal */}
 
           {/* Delete Modal */}
           <CModal visible={visibleDelete} onClose={() => setVisibleDelete(false)}>

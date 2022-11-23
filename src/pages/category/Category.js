@@ -210,7 +210,7 @@ const Category = () => {
             <CModalHeader>
               <CModalTitle>Delete</CModalTitle>
             </CModalHeader>
-            <CModalBody>Are you sure to Add?</CModalBody>
+            <CModalBody>Are you sure to Delete?</CModalBody>
             <CModalFooter>
               <CButton color="secondary" onClick={() => setVisibleDelete(false)}>
                 No
