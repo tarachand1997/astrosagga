@@ -77,11 +77,33 @@ export function addCategory(data, callBack) {
             },
             data: data
         }).then(function (response) {
-            callBack("success")
+            callBack(response.data.message)
             dispatch(getCategory())
         }).catch(error => {
             callBack("error")
             console.warn("addCategory", error);
+            // dispatch(changeLoading());
+        });
+    }
+}
+
+export function updateCategory(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.UPDATE_CATEGORY}`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorizationkey': token
+            },
+            data: data
+        }).then(function (response) {
+            callBack(response.data.message)
+            dispatch(getCategory())
+        }).catch(error => {
+            callBack("error")
+            console.warn("updateCategory", error);
             // dispatch(changeLoading());
         });
     }

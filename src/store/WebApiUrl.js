@@ -6,6 +6,7 @@ export const LOGOUT = "/userLogout"
 export const CATEGORY = "/categories-list"
 export const DELETE_CATEGORY = "/categories_remove"
 export const ADD_CATEGORY = "/categories-create"
+export const UPDATE_CATEGORY = "/categories-update"
 
 export const SLIDERS = "/sliders"
 export const DELETE_SLIDER = "/sliders-remove"
