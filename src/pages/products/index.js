@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { CCard, CCardBody, CCardHeader, CCol, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow, CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CToast, CToastBody, CToastHeader, CToaster, CFormInput, CFormLabel, CForm, CFormTextarea, CFormSelect } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilTrash, cilPlus } from '@coreui/icons'
+import { cilTrash, cilPlus, cilPencil } from '@coreui/icons'
 import { useSelector, useDispatch } from 'react-redux'
-import { getProductCategory, getProducts, addProducts, deleteProducts } from '../../store/actions/adminAction'
+import { getProductCategory, getProducts, addProducts, updateProducts, deleteProducts } from '../../store/actions/adminAction'
 import { IMAGE_BASE_URL } from '../../store/WebApiUrl'
 
 const Products = () => {
@@ -15,6 +15,8 @@ const Products = () => {
   const [selectedData, setSelectedData] = useState({})
   const [visibleAdd, setVisibleAdd] = useState(false)
   const [validated, setValidated] = useState(false)
+  const [updateItem, setUpdateItem] = useState({})
+  const [isEdit, setIsEdit] = useState(false)
   const [toast, addToast] = useState(0)
   const toaster = useRef()
 
@@ -22,6 +24,13 @@ const Products = () => {
     dispatch(getProductCategory())
     dispatch(getProducts())
   }, [])
+
+  useEffect(() => {
+    if (!visibleAdd) {
+      setUpdateItem({})
+      setIsEdit(false)
+    }
+  }, [visibleAdd])
 
   useEffect(() => {
     setProductData(productList)
@@ -81,10 +90,15 @@ const Products = () => {
     apiData.append("image", event.target.astImage.files[0])
     apiData.append("otherImage", event.target.astImageOth.files[0])
     apiData.append("description", event.target.description.value)
-    dispatch(addProducts(apiData, (res) => handleAddResponse(res)))
+    if (isEdit) {
+      apiData.append("id", updateItem.id)
+      dispatch(updateProducts(apiData, (res) => handleAddResponse(res, "Update")))
+    } else {
+      dispatch(addProducts(apiData, (res) => handleAddResponse(res, "Add")))
+    }
   }
 
-  const handleAddResponse = (response) => {
+  const handleAddResponse = (response, type) => {
     setVisibleAdd(false);
     let successToast = (
       <CToast title="Product" autohide={true}>
@@ -98,15 +112,21 @@ const Products = () => {
             focusable="false"
             role="img"
           >
-            <rect width="100%" height="100%" fill={response === "error" ? "red" : "#007aff"}></rect>
+            <rect width="100%" height="100%" fill={response !== "error" ? "#007aff" : "red"}></rect>
           </svg>
           <strong className="me-auto">Product</strong>
           <small>Just now</small>
         </CToastHeader>
-        <CToastBody>{response === "error" ? "Product Add Failed" : "Product Added Successfully"}</CToastBody>
+        <CToastBody>{response !== "error" ? response : "Product " + type + " Failed"}</CToastBody>
       </CToast>
     )
     addToast(successToast);
+  }
+
+  const updateModal = (item) => {
+    setIsEdit(true)
+    setUpdateItem(item);
+    setVisibleAdd(true);
   }
 
   return (
@@ -156,7 +176,8 @@ const Products = () => {
                           <img src={`${IMAGE_BASE_URL}${item.file_path}/${item.image}`} height="50" width="50" />
                         </CTableDataCell>
                         <CTableDataCell>
-                          <CIcon onClick={() => deleteModal(item)} icon={cilTrash} className="me-2 danger" />
+                          <CIcon onClick={() => updateModal(item)} icon={cilPencil} className="me-2 danger" />
+                          <CIcon onClick={() => deleteModal(item)} icon={cilTrash} className="me-2 danger mx-2" />
                         </CTableDataCell>
                       </CTableRow>
                     )
@@ -170,7 +191,7 @@ const Products = () => {
           {/* Add Modal */}
           <CModal size='lg' visible={visibleAdd} onClose={() => setVisibleAdd(false)}>
             <CModalHeader>
-              <CModalTitle>Add</CModalTitle>
+              <CModalTitle>{isEdit ? "Update" : 'Add'}</CModalTitle>
             </CModalHeader>
             <CModalBody>
               <CForm
@@ -188,7 +209,7 @@ const Products = () => {
                     <option value="">Select Category</option>
                     {
                       productCategoryList.map((item) => {
-                        return <option value={item.id}>{item.name}</option>
+                        return <option selected={updateItem.product_cat_id == item.id} value={item.id}>{item.name}</option>
                       })
                     }
                   </CFormSelect>
@@ -204,6 +225,8 @@ const Products = () => {
                     type="text"
                     placeholder="Enter Name"
                     aria-label="default input example"
+                    value={updateItem.productName}
+                    onChange={(e) => setUpdateItem({ ...updateItem, productName: e.target.value })}
                   />
                 </div>
                 <div className='col-md-6'>
@@ -217,6 +240,8 @@ const Products = () => {
                     type="number"
                     placeholder="Enter Price"
                     aria-label="default input example"
+                    value={updateItem.price}
+                    onChange={(e) => setUpdateItem({ ...updateItem, price: e.target.value })}
                   />
                 </div>
                 <div className='col-md-6'>
@@ -230,6 +255,8 @@ const Products = () => {
                     type="number"
                     placeholder="Enter Discount"
                     aria-label="default input example"
+                    value={updateItem.discount}
+                    onChange={(e) => setUpdateItem({ ...updateItem, discount: e.target.value })}
                   />
                 </div>
                 <div className='col-md-6'>
@@ -243,6 +270,8 @@ const Products = () => {
                     type="number"
                     placeholder="Enter Qty"
                     aria-label="default input example"
+                    value={updateItem.totalQuantity}
+                    onChange={(e) => setUpdateItem({ ...updateItem, totalQuantity: e.target.value })}
                   />
                 </div>
                 <div className='col-md-6'>
@@ -254,7 +283,7 @@ const Products = () => {
                     type="file"
                     id="astImage"
                     aria-label="file example"
-                    required
+                    required={!isEdit}
                   />
                   {/* <CFormFeedback invalid>Category Image Required</CFormFeedback> */}
                 </div>
@@ -267,7 +296,7 @@ const Products = () => {
                     type="file"
                     id="astImageOth"
                     aria-label="file example"
-                    required
+                    required={!isEdit}
                   />
                   {/* <CFormFeedback invalid>Category Image Required</CFormFeedback> */}
                 </div>
@@ -282,10 +311,12 @@ const Products = () => {
                     // invalid
                     required
                     rows={4}
+                    value={updateItem.totalQuantity}
+                    onChange={(e) => setUpdateItem({ ...updateItem, totalQuantity: e.target.value })}
                   ></CFormTextarea>
                 </div>
                 <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                  <CButton type='submit' color="primary">Add</CButton>
+                  <CButton type='submit' color="primary">{isEdit ? "Update" : 'Add'}</CButton>
                   <CButton color="secondary" onClick={() => setVisibleAdd(false)}>
                     Cancel
                   </CButton>

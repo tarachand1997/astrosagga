@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { CCard, CCardBody, CCardHeader, CCol, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow, CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CToast, CToastBody, CToastHeader, CToaster, CFormInput, CFormLabel, CForm, CFormTextarea, CFormSelect } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilTrash, cilPlus } from '@coreui/icons'
+import { cilTrash, cilPlus, cilPencil } from '@coreui/icons'
 import { useSelector, useDispatch } from 'react-redux'
-import { getUsers, addUsers, deleteUsers } from '../../store/actions/adminAction'
+import { getUsers, addUsers, updateUsers, deleteUsers } from '../../store/actions/adminAction'
 import { IMAGE_BASE_URL } from '../../store/WebApiUrl'
 
 const Users = () => {
@@ -14,12 +14,21 @@ const Users = () => {
   const [selectedData, setSelectedData] = useState({})
   const [visibleAdd, setVisibleAdd] = useState(false)
   const [validated, setValidated] = useState(false)
+  const [updateItem, setUpdateItem] = useState({})
+  const [isEdit, setIsEdit] = useState(false)
   const [toast, addToast] = useState(0)
   const toaster = useRef()
 
   useEffect(() => {
     dispatch(getUsers())
   }, [])
+
+  useEffect(() => {
+    if (!visibleAdd) {
+      setUpdateItem({})
+      setIsEdit(false)
+    }
+  }, [visibleAdd])
 
   useEffect(() => {
     setUserData(userList)
@@ -72,9 +81,6 @@ const Users = () => {
     }
     let apiData = new FormData();
     apiData.append("name", event.target.astName.value)
-    apiData.append("email", event.target.astEmail.value)
-    apiData.append("password", event.target.astPass.value)
-    apiData.append("mobile", event.target.astMobile.value)
     apiData.append("address", event.target.astAdd.value)
     apiData.append("city", event.target.astCity.value)
     apiData.append("state", event.target.astState.value)
@@ -82,10 +88,18 @@ const Users = () => {
     apiData.append("pincode", event.target.astPincode.value)
     apiData.append("image", event.target.astImage.files[0])
     apiData.append("description", event.target.description.value)
-    dispatch(addUsers(apiData, (res) => handleAddResponse(res)))
+    if (isEdit) {
+      apiData.append("id", updateItem.id)
+      dispatch(updateUsers(apiData, (res) => handleAddResponse(res, "Update")))
+    } else {
+      apiData.append("email", event.target.astEmail.value)
+      apiData.append("password", event.target.astPass.value)
+      apiData.append("mobile", event.target.astMobile.value)
+      dispatch(addUsers(apiData, (res) => handleAddResponse(res, "Add")))
+    }
   }
 
-  const handleAddResponse = (response) => {
+  const handleAddResponse = (response, type) => {
     setVisibleAdd(false);
     let successToast = (
       <CToast title="User" autohide={true}>
@@ -99,15 +113,21 @@ const Users = () => {
             focusable="false"
             role="img"
           >
-            <rect width="100%" height="100%" fill={response === "error" ? "red" : "#007aff"}></rect>
+            <rect width="100%" height="100%" fill={response !== "error" ? "#007aff" : "red"}></rect>
           </svg>
           <strong className="me-auto">User</strong>
           <small>Just now</small>
         </CToastHeader>
-        <CToastBody>{response === "error" ? "User Add Failed" : "User Added Successfully"}</CToastBody>
+        <CToastBody>{response !== "error" ? response : "User " + type + " Failed"}</CToastBody>
       </CToast>
     )
     addToast(successToast);
+  }
+
+  const updateModal = (item) => {
+    setIsEdit(true)
+    setUpdateItem(item);
+    setVisibleAdd(true);
   }
 
   return (
@@ -157,7 +177,8 @@ const Users = () => {
                         <CTableDataCell>{item.pincode}</CTableDataCell>
                         <CTableDataCell>{item.state}</CTableDataCell>
                         <CTableDataCell>
-                          <CIcon onClick={() => deleteModal(item)} icon={cilTrash} className="me-2 danger" />
+                          <CIcon onClick={() => updateModal(item)} icon={cilPencil} className="me-2 danger" />
+                          <CIcon onClick={() => deleteModal(item)} icon={cilTrash} className="me-2 danger mx-2" />
                         </CTableDataCell>
                       </CTableRow>
                     )
@@ -168,10 +189,10 @@ const Users = () => {
             {/* </DocsExample> */}
           </CCardBody>
 
-           {/* Add Modal */}
-           <CModal size='lg' visible={visibleAdd} onClose={() => setVisibleAdd(false)}>
+          {/* Add Modal */}
+          <CModal size='lg' visible={visibleAdd} onClose={() => setVisibleAdd(false)}>
             <CModalHeader>
-              <CModalTitle>Add</CModalTitle>
+              <CModalTitle>{isEdit ? "Update" : 'Add'}</CModalTitle>
             </CModalHeader>
             <CModalBody>
               <CForm
@@ -193,47 +214,61 @@ const Users = () => {
                     type="text"
                     placeholder="Enter Name"
                     aria-label="default input example"
+                    value={updateItem.name}
+                    onChange={(e) => setUpdateItem({ ...updateItem, name: e.target.value })}
                   />
                 </div>
-                <div className='col-md-6'>
-                  <CFormLabel htmlFor="astMobile">
-                    Mobile
-                  </CFormLabel>
-                  <CFormInput
-                    name='astMobile'
-                    id="astMobile"
-                    required
-                    type="number"
-                    placeholder="Enter Mobile"
-                    aria-label="default input example"
-                  />
-                </div>
-                <div className='col-md-6'>
-                  <CFormLabel htmlFor="astEmail">
-                    Email
-                  </CFormLabel>
-                  <CFormInput
-                    name='astEmail'
-                    id="astEmail"
-                    required
-                    type="email"
-                    placeholder="Enter Email"
-                    aria-label="default input example"
-                  />
-                </div>
-                <div className='col-md-6'>
-                  <CFormLabel htmlFor="astPass">
-                    Password
-                  </CFormLabel>
-                  <CFormInput
-                    name='astPass'
-                    id="astPass"
-                    required
-                    type="password"
-                    placeholder="Enter Password"
-                    aria-label="default input example"
-                  />
-                </div>
+                {
+                  !isEdit ? (
+                    <div className='col-md-6'>
+                      <CFormLabel htmlFor="astMobile">
+                        Mobile
+                      </CFormLabel>
+                      <CFormInput
+                        name='astMobile'
+                        id="astMobile"
+                        required
+                        type="number"
+                        placeholder="Enter Mobile"
+                        aria-label="default input example"
+                      />
+                    </div>
+                  ) : null
+                }
+                {
+                  !isEdit ? (
+                    <div className='col-md-6'>
+                      <CFormLabel htmlFor="astEmail">
+                        Email
+                      </CFormLabel>
+                      <CFormInput
+                        name='astEmail'
+                        id="astEmail"
+                        required
+                        type="email"
+                        placeholder="Enter Email"
+                        aria-label="default input example"
+                      />
+                    </div>
+                  ) : null
+                }
+                {
+                  !isEdit ? (
+                    <div className='col-md-6'>
+                      <CFormLabel htmlFor="astPass">
+                        Password
+                      </CFormLabel>
+                      <CFormInput
+                        name='astPass'
+                        id="astPass"
+                        required
+                        type="password"
+                        placeholder="Enter Password"
+                        aria-label="default input example"
+                      />
+                    </div>
+                  ) : null
+                }
                 <div className='col-md-6'>
                   <CFormLabel htmlFor="astCountry">
                     Country
@@ -245,6 +280,8 @@ const Users = () => {
                     type="text"
                     placeholder="Enter Country"
                     aria-label="default input example"
+                    value={updateItem.country}
+                    onChange={(e) => setUpdateItem({ ...updateItem, country: e.target.value })}
                   />
                 </div>
                 <div className='col-md-6'>
@@ -258,6 +295,8 @@ const Users = () => {
                     type="text"
                     placeholder="Enter State"
                     aria-label="default input example"
+                    value={updateItem.state}
+                    onChange={(e) => setUpdateItem({ ...updateItem, state: e.target.value })}
                   />
                 </div>
                 <div className='col-md-6'>
@@ -271,6 +310,8 @@ const Users = () => {
                     type="text"
                     placeholder="Enter City"
                     aria-label="default input example"
+                    value={updateItem.city}
+                    onChange={(e) => setUpdateItem({ ...updateItem, city: e.target.value })}
                   />
                 </div>
                 <div className='col-md-6'>
@@ -284,6 +325,8 @@ const Users = () => {
                     type="number"
                     placeholder="Enter Pincode"
                     aria-label="default input example"
+                    value={updateItem.pincode}
+                    onChange={(e) => setUpdateItem({ ...updateItem, pincode: e.target.value })}
                   />
                 </div>
                 <div className='col-md-6'>
@@ -297,6 +340,8 @@ const Users = () => {
                     placeholder="Enter Address"
                     aria-label="default input example"
                     rows={1}
+                    value={updateItem.address}
+                    onChange={(e) => setUpdateItem({ ...updateItem, address: e.target.value })}
                   ></CFormTextarea>
                 </div>
                 <div className='col-md-6'>
@@ -323,10 +368,12 @@ const Users = () => {
                     // invalid
                     required
                     rows={4}
+                    value={updateItem.description}
+                    onChange={(e) => setUpdateItem({ ...updateItem, description: e.target.value })}
                   ></CFormTextarea>
                 </div>
                 <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                  <CButton type='submit' color="primary">Add</CButton>
+                  <CButton type='submit' color="primary">{isEdit ? "Update" : 'Add'}</CButton>
                   <CButton color="secondary" onClick={() => setVisibleAdd(false)}>
                     Cancel
                   </CButton>
