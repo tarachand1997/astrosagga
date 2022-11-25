@@ -200,7 +200,7 @@ const Astrologer = () => {
                     <option value="">Select Category</option>
                     {
                       categoryList.map((item) => {
-                        return <option value={item.id}>{item.name}</option>
+                        return <option key={item.id} value={item.id}>{item.name}</option>
                       })
                     }
                   </CFormSelect>

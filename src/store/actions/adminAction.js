@@ -170,11 +170,33 @@ export function addSliders(data, callBack) {
             },
             data: data
         }).then(function (response) {
-            callBack("success")
+            callBack(response.data.message)
             dispatch(getSliders())
         }).catch(error => {
             callBack("error")
             console.warn("addSliders", error);
+            // dispatch(changeLoading());
+        });
+    }
+}
+
+export function updateSliders(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.UPDATE_SLIDER}`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorizationkey': token
+            },
+            data: data
+        }).then(function (response) {
+            callBack(response.data.message)
+            dispatch(getSliders())
+        }).catch(error => {
+            callBack("error")
+            console.warn("updateSliders", error);
             // dispatch(changeLoading());
         });
     }
@@ -240,11 +262,32 @@ export function addAstrologer(data, callBack) {
             },
             data: data
         }).then(function (response) {
-            callBack("success")
+            callBack(response.data.message)
             dispatch(getAstrologer())
         }).catch(error => {
             callBack("error")
             console.warn("addAstrologer", error);
+        });
+    }
+}
+
+export function updateAstrologer(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.UPDATE_ASTROLOGER}`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorizationkey': token
+            },
+            data: data
+        }).then(function (response) {
+            callBack(response.data.message)
+            dispatch(getAstrologer())
+        }).catch(error => {
+            callBack("error")
+            console.warn("updateAstrologer", error);
         });
     }
 }
@@ -309,11 +352,32 @@ export function addUsers(data, callBack) {
             },
             data: data
         }).then(function (response) {
-            callBack("success")
+            callBack(response.data.message)
             dispatch(getUsers())
         }).catch(error => {
             callBack("error")
             console.warn("addUsers", error);
+        });
+    }
+}
+
+export function updateUsers(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.UPDATE_USERS}`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorizationkey': token
+            },
+            data: data
+        }).then(function (response) {
+            callBack(response.data.message)
+            dispatch(getUsers())
+        }).catch(error => {
+            callBack("error")
+            console.warn("updateUsers", error);
         });
     }
 }
@@ -379,11 +443,33 @@ export function addProductCategory(data, callBack) {
             },
             data: data
         }).then(function (response) {
-            callBack("success")
+            callBack(response.data.message)
             dispatch(getProductCategory())
         }).catch(error => {
             callBack("error")
             console.warn("addProductCategory", error);
+            // dispatch(changeLoading());
+        });
+    }
+}
+
+export function updateProductCategory(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.UPDATE_PRODUCTCATEGORY}`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorizationkey': token
+            },
+            data: data
+        }).then(function (response) {
+            callBack(response.data.message)
+            dispatch(getProductCategory())
+        }).catch(error => {
+            callBack("error")
+            console.warn("updateProductCategory", error);
             // dispatch(changeLoading());
         });
     }
@@ -450,11 +536,33 @@ export function addBlog(data, callBack) {
             },
             data: data
         }).then(function (response) {
-            callBack("success")
+            callBack(response.data.message)
             dispatch(getBlogList())
         }).catch(error => {
             callBack("error")
             console.warn("addBlog", error);
+            // dispatch(changeLoading());
+        });
+    }
+}
+
+export function updateBlog(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.UPDATE_BLOG}`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorizationkey': token
+            },
+            data: data
+        }).then(function (response) {
+            callBack(response.data.message)
+            dispatch(getBlogList())
+        }).catch(error => {
+            callBack("error")
+            console.warn("updateBlog", error);
             // dispatch(changeLoading());
         });
     }
@@ -521,11 +629,33 @@ export function addProducts(data, callBack) {
             },
             data: data
         }).then(function (response) {
-            callBack("success")
+            callBack(response.data.message)
             dispatch(getProducts())
         }).catch(error => {
             callBack("error")
             console.warn("addProducts", error);
+            // dispatch(changeLoading());
+        });
+    }
+}
+
+export function updateProducts(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.UPDATE_PRODUCTS}`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorizationkey': token
+            },
+            data: data
+        }).then(function (response) {
+            callBack(response.data.message)
+            dispatch(getProducts())
+        }).catch(error => {
+            callBack("error")
+            console.warn("updateProducts", error);
             // dispatch(changeLoading());
         });
     }
@@ -602,6 +732,28 @@ export function addPrivacyPolicy(data, callBack) {
     }
 }
 
+export function updatePrivacyPolicy(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.UPDATE_PRIVACYPOLICY}`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorizationkey': token
+            },
+            data: data
+        }).then(function (response) {
+            callBack(response.data.message)
+            dispatch(getPrivacyPolicy())
+        }).catch(error => {
+            callBack("error")
+            console.warn("updatePrivacyPolicy", error);
+            // dispatch(changeLoading());
+        });
+    }
+}
+
 export function getTermCondition() {
     return async function (dispatch) {
         // dispatch(changeLoading(true));
@@ -662,11 +814,32 @@ export function addTermCondition(data, callBack) {
             },
             data: data
         }).then(function (response) {
-            callBack("success")
+            callBack(response.data.message)
             dispatch(getTermCondition())
         }).catch(error => {
             callBack("error")
             console.warn("addTermCondition", error);
+        });
+    }
+}
+
+export function updateTermCondition(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.UPDATE_TERMCONDITION}`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorizationkey': token
+            },
+            data: data
+        }).then(function (response) {
+            callBack(response.data.message)
+            dispatch(getTermCondition())
+        }).catch(error => {
+            callBack("error")
+            console.warn("updateTermCondition", error);
         });
     }
 }

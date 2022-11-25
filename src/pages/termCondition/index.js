@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { CCard, CCardBody, CCardHeader, CCol, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow, CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CToast, CToastBody, CToastHeader, CToaster, CFormInput, CFormLabel, CForm, CFormTextarea } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilTrash, cilPlus } from '@coreui/icons'
+import { cilTrash, cilPlus, cilPencil } from '@coreui/icons'
 import { useSelector, useDispatch } from 'react-redux'
-import { getTermCondition, addTermCondition, deleteTermCondition } from '../../store/actions/adminAction'
+import { getTermCondition, addTermCondition, deleteTermCondition, updateTermCondition } from '../../store/actions/adminAction'
 
 const TermCondition = () => {
   const termConditionList = useSelector((state) => state.admin.termConditionList)
@@ -13,12 +13,21 @@ const TermCondition = () => {
   const [selectedData, setSelectedData] = useState({})
   const [visibleAdd, setVisibleAdd] = useState(false)
   const [validated, setValidated] = useState(false)
+  const [updateItem, setUpdateItem] = useState({})
+  const [isEdit, setIsEdit] = useState(false)
   const [toast, addToast] = useState(0)
   const toaster = useRef()
 
   useEffect(() => {
     dispatch(getTermCondition())
   }, [])
+
+  useEffect(() => {
+    if (!visibleAdd) {
+      setUpdateItem({})
+      setIsEdit(false)
+    }
+  }, [visibleAdd])
 
   useEffect(() => {
     setTermConditionData(termConditionList)
@@ -72,10 +81,15 @@ const TermCondition = () => {
     let apiData = new FormData();
     apiData.append("title", event.target.catName.value)
     apiData.append("description", event.target.description.value)
-    dispatch(addTermCondition(apiData, (res) => handleAddResponse(res)))
+    if (isEdit) {
+      apiData.append("id", updateItem.id)
+      dispatch(updateTermCondition(apiData, (res) => handleAddResponse(res, "Update")))
+    } else {
+      dispatch(addTermCondition(apiData, (res) => handleAddResponse(res, "Add")))
+    }
   }
 
-  const handleAddResponse = (response) => {
+  const handleAddResponse = (response, type) => {
     setVisibleAdd(false);
     let successToast = (
       <CToast title="Term & Condition" autohide={true}>
@@ -89,15 +103,21 @@ const TermCondition = () => {
             focusable="false"
             role="img"
           >
-            <rect width="100%" height="100%" fill={response === "error" ? "red" : "#007aff"}></rect>
+            <rect width="100%" height="100%" fill={response !== "error" ? "#007aff" : "red"}></rect>
           </svg>
           <strong className="me-auto">Term & Condition</strong>
           <small>Just now</small>
         </CToastHeader>
-        <CToastBody>{response === "error" ? "Term & Condition Add Failed" : "Term & Condition Added Successfully"}</CToastBody>
+        <CToastBody>{response !== "error" ? response : "Term & Condition " + type + " Failed"}</CToastBody>
       </CToast>
     )
     addToast(successToast);
+  }
+
+  const updateModal = (item) => {
+    setIsEdit(true)
+    setUpdateItem(item);
+    setVisibleAdd(true);
   }
 
   return (
@@ -141,7 +161,8 @@ const TermCondition = () => {
                         <CTableDataCell>{item.title}</CTableDataCell>
                         <CTableDataCell>{item.status}</CTableDataCell>
                         <CTableDataCell>
-                          <CIcon onClick={() => deleteModal(item)} icon={cilTrash} className="me-2 danger" />
+                          <CIcon onClick={() => updateModal(item)} icon={cilPencil} className="me-2 danger" />
+                          <CIcon onClick={() => deleteModal(item)} icon={cilTrash} className="me-2 danger mx-2" />
                         </CTableDataCell>
                       </CTableRow>
                     )
@@ -155,7 +176,7 @@ const TermCondition = () => {
           {/* Add Modal */}
           <CModal alignment="center" visible={visibleAdd} onClose={() => setVisibleAdd(false)}>
             <CModalHeader>
-              <CModalTitle>Add</CModalTitle>
+              <CModalTitle>{isEdit ? "Update" : 'Add'}</CModalTitle>
             </CModalHeader>
             <CModalBody>
               <CForm
@@ -175,6 +196,8 @@ const TermCondition = () => {
                     id="validationDefault05"
                     required
                     type="text"
+                    value={updateItem.title}
+                    onChange={(e) => setUpdateItem({ ...updateItem, title: e.target.value })}
                     placeholder="Enter Title"
                     aria-label="default input example"
                   />
@@ -186,6 +209,8 @@ const TermCondition = () => {
                   <CFormTextarea
                     id="validationTextarea"
                     name="description"
+                    value={updateItem.description}
+                    onChange={(e) => setUpdateItem({ ...updateItem, description: e.target.value })}
                     placeholder="Description"
                     // invalid
                     required
@@ -193,7 +218,7 @@ const TermCondition = () => {
                   ></CFormTextarea>
                 </div>
                 <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                  <CButton type='submit' color="primary">Add</CButton>
+                  <CButton type='submit' color="primary">{isEdit ? "Update" : 'Add'}</CButton>
                   <CButton color="secondary" onClick={() => setVisibleAdd(false)}>
                     Cancel
                   </CButton>

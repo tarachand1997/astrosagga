@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { CCard, CCardBody, CCardHeader, CCol, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow, CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CToast, CToastBody, CToastHeader, CToaster, CFormInput, CFormLabel, CForm } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilTrash, cilPlus } from '@coreui/icons'
+import { cilTrash, cilPlus, cilPencil } from '@coreui/icons'
 import { useSelector, useDispatch } from 'react-redux'
-import { getSliders, addSliders, deleteSliders } from '../../store/actions/adminAction'
+import { getSliders, addSliders, updateSliders, deleteSliders } from '../../store/actions/adminAction'
 import { IMAGE_BASE_URL } from '../../store/WebApiUrl'
 
 const Slider = () => {
@@ -14,12 +14,21 @@ const Slider = () => {
   const [selectedData, setSelectedData] = useState({})
   const [visibleAdd, setVisibleAdd] = useState(false)
   const [validated, setValidated] = useState(false)
+  const [updateItem, setUpdateItem] = useState({})
+  const [isEdit, setIsEdit] = useState(false)
   const [toast, addToast] = useState(0)
   const toaster = useRef()
 
   useEffect(() => {
     dispatch(getSliders())
   }, [])
+
+  useEffect(() => {
+    if (!visibleAdd) {
+      setUpdateItem({})
+      setIsEdit(false)
+    }
+  }, [visibleAdd])
 
   useEffect(() => {
     setSliderListData(sliderList)
@@ -73,10 +82,15 @@ const Slider = () => {
     let apiData = new FormData();
     apiData.append("name", event.target.catName.value)
     apiData.append("image", event.target.catImage.files[0])
-    dispatch(addSliders(apiData, (res) => handleAddResponse(res)))
+    if (isEdit) {
+      apiData.append("id", updateItem.id)
+      dispatch(updateSliders(apiData, (res) => handleAddResponse(res, "Update")))
+    } else {
+      dispatch(addSliders(apiData, (res) => handleAddResponse(res, "Add")))
+    }
   }
 
-  const handleAddResponse = (response) => {
+  const handleAddResponse = (response, type) => {
     setVisibleAdd(false);
     let successToast = (
       <CToast title="Slider" autohide={true}>
@@ -90,15 +104,21 @@ const Slider = () => {
             focusable="false"
             role="img"
           >
-            <rect width="100%" height="100%" fill={response === "error" ? "red" : "#007aff"}></rect>
+            <rect width="100%" height="100%" fill={response !== "error" ? "#007aff" : "red"}></rect>
           </svg>
           <strong className="me-auto">Slider</strong>
           <small>Just now</small>
         </CToastHeader>
-        <CToastBody>{response === "error" ? "Slider Add Failed" : "Slider Added Successfully"}</CToastBody>
+        <CToastBody>{response !== "error" ? response : "Slider " + type + " Failed"}</CToastBody>
       </CToast>
     )
     addToast(successToast);
+  }
+
+  const updateModal = (item) => {
+    setIsEdit(true)
+    setUpdateItem(item);
+    setVisibleAdd(true);
   }
 
   return (
@@ -144,7 +164,8 @@ const Slider = () => {
                           <img src={`${IMAGE_BASE_URL}${item.filePath}/${item.image}`} height="50" width="50" />
                         </CTableDataCell>
                         <CTableDataCell>
-                          <CIcon onClick={() => deleteModal(item)} icon={cilTrash} className="me-2 danger" />
+                          <CIcon onClick={() => updateModal(item)} icon={cilPencil} className="me-2 danger" />
+                          <CIcon onClick={() => deleteModal(item)} icon={cilTrash} className="me-2 danger mx-2" />
                         </CTableDataCell>
                       </CTableRow>
                     )
@@ -158,7 +179,7 @@ const Slider = () => {
           {/* Add Modal */}
           <CModal alignment="center" visible={visibleAdd} onClose={() => setVisibleAdd(false)}>
             <CModalHeader>
-              <CModalTitle>Add</CModalTitle>
+              <CModalTitle>{isEdit ? "Update" : 'Add'}</CModalTitle>
             </CModalHeader>
             <CModalBody>
               <CForm
@@ -178,6 +199,8 @@ const Slider = () => {
                     id="validationDefault05"
                     required
                     type="text"
+                    value={updateItem.name}
+                    onChange={(e) => setUpdateItem({ ...updateItem, name: e.target.value })}
                     placeholder="Enter Name"
                     aria-label="default input example"
                   />
@@ -191,12 +214,12 @@ const Slider = () => {
                     type="file"
                     id="validationTextarea"
                     aria-label="file example"
-                    required
+                    required={!isEdit}
                   />
                   {/* <CFormFeedback invalid>Category Image Required</CFormFeedback> */}
                 </div>
                 <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                  <CButton type='submit' color="primary">Add</CButton>
+                  <CButton type='submit' color="primary">{isEdit ? "Update" : 'Add'}</CButton>
                   <CButton color="secondary" onClick={() => setVisibleAdd(false)}>
                     Cancel
                   </CButton>
