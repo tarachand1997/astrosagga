@@ -10,7 +10,8 @@ const initialState = {
     blogList: [],
     productList: [],
     privacyPolicyList: [],
-    termConditionList: []
+    termConditionList: [],
+    coursesList: []
 }
 
 const adminReducer = (state = initialState, action) => {
@@ -37,6 +38,8 @@ const adminReducer = (state = initialState, action) => {
             return { ...state, privacyPolicyList: action.payload }
         case types.GETTERMCONDITION:
             return { ...state, termConditionList: action.payload }
+        case types.GETCOURSES:
+            return { ...state, coursesList: action.payload }
         default:
             return state
     }

@@ -161,7 +161,7 @@ const Category = () => {
                         <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
                         <CTableDataCell>{item.name}</CTableDataCell>
                         <CTableDataCell>
-                          <img src={`${IMAGE_BASE_URL}${item.filePath}/${item.image}`} height="50" width="50" />
+                          <img alt='' src={`${IMAGE_BASE_URL}${item.filePath}/${item.image}`} height="50" width="50" />
                         </CTableDataCell>
                         <CTableDataCell>
                           <CIcon onClick={() => updateModal(item)} icon={cilPencil} className="me-2 danger" />

@@ -11,6 +11,7 @@ import Blogs from './pages/blogList'
 import Products from './pages/products'
 import PrivacyPolicy from './pages/privacyPolicy'
 import TermCondition from './pages/termCondition'
+import Courses from './pages/courses'
 // const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 // const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
 
@@ -73,6 +74,7 @@ const routes = [
   { path: '/admin/privacy-policy-list', name: 'Privacy policy list', element: PrivacyPolicy },
   { path: '/admin/term-condition-list', name: 'Term & Condition list', element: TermCondition },
   { path: '/admin/product-list', name: 'Product List', element: Products },
+  { path: '/admin/courses-list', name: 'Courses List', element: Courses },
   // { path: '/theme/colors', name: 'Colors', element: Colors },
   // { path: '/theme/typography', name: 'Typography', element: Typography },
   // { path: '/base', name: 'Base', element: Cards, exact: true },

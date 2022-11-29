@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { CCard, CCardBody, CCardHeader, CCol, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow, CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CToast, CToastBody, CToastHeader, CToaster, CFormInput, CFormLabel, CForm, CFormTextarea, CFormSelect } from '@coreui/react'
+import { CCard, CCardBody, CCardHeader, CCol, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow, CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CToast, CToastBody, CToastHeader, CToaster, CFormInput, CFormLabel, CForm, CFormTextarea } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilTrash, cilPlus, cilPencil } from '@coreui/icons'
 import { useSelector, useDispatch } from 'react-redux'
@@ -65,7 +65,7 @@ const Users = () => {
           <strong className="me-auto">User</strong>
           <small>Just now</small>
         </CToastHeader>
-        <CToastBody>{response == "error" ? "User Deleted Failed" : "User Deleted Successfully"}</CToastBody>
+        <CToastBody>{response === "error" ? "User Deleted Failed" : "User Deleted Successfully"}</CToastBody>
       </CToast>
     )
     addToast(successToast);
@@ -172,7 +172,7 @@ const Users = () => {
                         <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
                         <CTableDataCell>{item.name}</CTableDataCell>
                         <CTableDataCell>
-                          <img src={`${IMAGE_BASE_URL}${item.filePath}/${item.image}`} height="50" width="50" />
+                          <img alt='' src={`${IMAGE_BASE_URL}${item.filePath}/${item.image}`} height="50" width="50" />
                         </CTableDataCell>
                         <CTableDataCell>{item.pincode}</CTableDataCell>
                         <CTableDataCell>{item.state}</CTableDataCell>

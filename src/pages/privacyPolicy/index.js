@@ -64,7 +64,7 @@ const PrivacyPolicy = () => {
           <strong className="me-auto">Privacy Policy</strong>
           <small>Just now</small>
         </CToastHeader>
-        <CToastBody>{response == "error" ? "Privacy Policy Deleted Failed" : "Privacy Policy Deleted Successfully"}</CToastBody>
+        <CToastBody>{response === "error" ? "Privacy Policy Deleted Failed" : "Privacy Policy Deleted Successfully"}</CToastBody>
       </CToast>
     )
     addToast(successToast);

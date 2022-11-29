@@ -67,7 +67,7 @@ const Products = () => {
           <strong className="me-auto">Product</strong>
           <small>Just now</small>
         </CToastHeader>
-        <CToastBody>{response == "error" ? "Product Deleted Failed" : "Product Deleted Successfully"}</CToastBody>
+        <CToastBody>{response === "error" ? "Product Deleted Failed" : "Product Deleted Successfully"}</CToastBody>
       </CToast>
     )
     addToast(successToast);
@@ -173,7 +173,7 @@ const Products = () => {
                         <CTableDataCell>{item.price}</CTableDataCell>
                         <CTableDataCell>{item.discount}</CTableDataCell>
                         <CTableDataCell>
-                          <img src={`${IMAGE_BASE_URL}${item.file_path}/${item.image}`} height="50" width="50" />
+                          <img alt='' src={`${IMAGE_BASE_URL}${item.file_path}/${item.image}`} height="50" width="50" />
                         </CTableDataCell>
                         <CTableDataCell>
                           <CIcon onClick={() => updateModal(item)} icon={cilPencil} className="me-2 danger" />
@@ -205,11 +205,11 @@ const Products = () => {
                   <CFormLabel htmlFor="astCategory">
                     Select Category
                   </CFormLabel>
-                  <CFormSelect name='astCategory' id='astCategory' aria-label="Default select example">
+                  <CFormSelect defaultValue={updateItem.product_cat_id} name='astCategory' id='astCategory' aria-label="Default select example">
                     <option value="">Select Category</option>
                     {
                       productCategoryList.map((item) => {
-                        return <option selected={updateItem.product_cat_id == item.id} value={item.id}>{item.name}</option>
+                        return <option key={item.id} value={item.id}>{item.name}</option>
                       })
                     }
                   </CFormSelect>

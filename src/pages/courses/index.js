@@ -1,15 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { CCard, CCardBody, CCardHeader, CCol, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow, CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CToast, CToastBody, CToastHeader, CToaster, CFormInput, CFormLabel, CForm, CFormTextarea } from '@coreui/react'
+import { CCard, CCardBody, CCardHeader, CCol, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow, CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CToast, CToastBody, CToastHeader, CToaster, CFormInput, CFormLabel, CForm, CFormTextarea, CFormSelect } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilTrash, cilPlus, cilPencil } from '@coreui/icons'
 import { useSelector, useDispatch } from 'react-redux'
-import { getProductCategory, addProductCategory, updateProductCategory, deleteProductCategory } from '../../store/actions/adminAction'
+import { getCategory, getCourses, addCourses, updateCourses, deleteCourses } from '../../store/actions/adminAction'
 import { IMAGE_BASE_URL } from '../../store/WebApiUrl'
 
-const ProductCategory = () => {
-  const productCategoryList = useSelector((state) => state.admin.productCategoryList)
+const Courses = () => {
+  const CoursesList = useSelector((state) => state.admin.coursesList)
+  const categoryList = useSelector((state) => state.admin.categoryList)
   const dispatch = useDispatch()
-  const [productCategoryData, setProductCategoryData] = useState([]);
+  const [CoursesData, setCoursesData] = useState([]);
   const [visibleDelete, setVisibleDelete] = useState(false)
   const [selectedData, setSelectedData] = useState({})
   const [visibleAdd, setVisibleAdd] = useState(false)
@@ -20,7 +21,8 @@ const ProductCategory = () => {
   const toaster = useRef()
 
   useEffect(() => {
-    dispatch(getProductCategory())
+    dispatch(getCategory())
+    dispatch(getCourses())
   }, [])
 
   useEffect(() => {
@@ -31,8 +33,8 @@ const ProductCategory = () => {
   }, [visibleAdd])
 
   useEffect(() => {
-    setProductCategoryData(productCategoryList)
-  }, [productCategoryList])
+    setCoursesData(CoursesList)
+  }, [CoursesList])
 
   const deleteModal = (item) => {
     setSelectedData(item)
@@ -43,13 +45,13 @@ const ProductCategory = () => {
     let apiData = {
       id: selectedData.id
     };
-    dispatch(deleteProductCategory(apiData, (response) => handleDeleteResponse(response)));
+    dispatch(deleteCourses(apiData, (response) => handleDeleteResponse(response)));
   }
 
   const handleDeleteResponse = (response) => {
     setVisibleDelete(false);
     let successToast = (
-      <CToast title="Product Category" autohide={true}>
+      <CToast title="Courses" autohide={true}>
         <CToastHeader closeButton>
           <svg
             className="rounded me-2"
@@ -62,10 +64,10 @@ const ProductCategory = () => {
           >
             <rect width="100%" height="100%" fill="#007aff"></rect>
           </svg>
-          <strong className="me-auto">Product Category</strong>
+          <strong className="me-auto">Courses</strong>
           <small>Just now</small>
         </CToastHeader>
-        <CToastBody>{response === "error" ? "Product Category Deleted Failed" : "Product Category Deleted Successfully"}</CToastBody>
+        <CToastBody>{response === "error" ? "Courses Deleted Failed" : "Courses Deleted Successfully"}</CToastBody>
       </CToast>
     )
     addToast(successToast);
@@ -80,21 +82,25 @@ const ProductCategory = () => {
       return
     }
     let apiData = new FormData();
-    apiData.append("name", event.target.catName.value)
+    apiData.append("cat_id", event.target.courseCategory.value)
+    apiData.append("courseName", event.target.catName.value)
     apiData.append("description", event.target.description.value)
+    apiData.append("fees", event.target.courseFee.value)
+    apiData.append("course_time", event.target.courseTime.value)
+    apiData.append("course_timeString", event.target.courseTimeType.value)
     apiData.append("image", event.target.catImage.files[0])
     if (isEdit) {
       apiData.append("id", updateItem.id)
-      dispatch(updateProductCategory(apiData, (res) => handleAddResponse(res, "Update")))
+      dispatch(updateCourses(apiData, (res) => handleAddResponse(res, "Update")))
     } else {
-      dispatch(addProductCategory(apiData, (res) => handleAddResponse(res, "Add")))
+      dispatch(addCourses(apiData, (res) => handleAddResponse(res, "Add")))
     }
   }
 
   const handleAddResponse = (response, type) => {
     setVisibleAdd(false);
     let successToast = (
-      <CToast title="Product Category" autohide={true}>
+      <CToast title="Courses" autohide={true}>
         <CToastHeader closeButton>
           <svg
             className="rounded me-2"
@@ -107,10 +113,10 @@ const ProductCategory = () => {
           >
             <rect width="100%" height="100%" fill={response !== "error" ? "#007aff" : "red"}></rect>
           </svg>
-          <strong className="me-auto">Product Category</strong>
+          <strong className="me-auto">Courses</strong>
           <small>Just now</small>
         </CToastHeader>
-        <CToastBody>{response !== "error" ? response : "Product Category " + type + " Failed"}</CToastBody>
+        <CToastBody>{response !== "error" ? response : "Courses " + type + " Failed"}</CToastBody>
       </CToast>
     )
     addToast(successToast);
@@ -127,7 +133,7 @@ const ProductCategory = () => {
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader className='d-md-flex'>
-            <strong>Product Category List</strong> <small></small>
+            <strong>Courses List</strong> <small></small>
             <div className="d-grid gap-2 d-md-flex justify-content-md-end">
               <CButton
                 className='me-md-2 btn-sm'
@@ -149,20 +155,24 @@ const ProductCategory = () => {
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col">Sr. No</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Category Name</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Category Image</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Course Name</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Fees</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Course Time</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Image</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Action</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
                 {
-                  productCategoryData?.map((item, index) => {
+                  CoursesData?.map((item, index) => {
                     return (
                       <CTableRow key={index}>
                         <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
-                        <CTableDataCell>{item.name}</CTableDataCell>
+                        <CTableDataCell>{item.courseName}</CTableDataCell>
+                        <CTableDataCell>{item.fees}</CTableDataCell>
+                        <CTableDataCell>{item.course_time + " " + item.course_timeString}</CTableDataCell>
                         <CTableDataCell>
-                          <img alt='' src={`${IMAGE_BASE_URL}${item.filePath}/${item.image}`} height="50" width="50" />
+                          <img alt='' src={`${IMAGE_BASE_URL}${item.file_path}/${item.image}`} height="50" width="50" />
                         </CTableDataCell>
                         <CTableDataCell>
                           <CIcon onClick={() => updateModal(item)} icon={cilPencil} className="me-2 danger" />
@@ -190,23 +200,78 @@ const ProductCategory = () => {
                 onSubmit={handleAdd}
                 encType="multipart/form-data"
               >
-
-                <div className="mb-3">
+                <div>
+                  <CFormLabel htmlFor="courseCategory">
+                    Select Category
+                  </CFormLabel>
+                  <CFormSelect defaultValue={updateItem.cat_id} name='courseCategory' id='courseCategory' aria-label="Default select example">
+                    <option value="">Select Category</option>
+                    {
+                      categoryList.map((item) => {
+                        return <option key={item.id} value={item.id}>{item.name}</option>
+                      })
+                    }
+                  </CFormSelect>
+                </div>
+                <div>
                   <CFormLabel htmlFor="validationDefault05">
-                    Name
+                    Course Name
                   </CFormLabel>
                   <CFormInput
                     name='catName'
                     id="validationDefault05"
                     required
                     type="text"
-                    value={updateItem.name}
-                    onChange={(e) => setUpdateItem({ ...updateItem, name: e.target.value })}
-                    placeholder="Enter Name"
+                    value={updateItem.courseName}
+                    onChange={(e) => setUpdateItem({ ...updateItem, courseName: e.target.value })}
+                    placeholder="Enter Course Name"
                     aria-label="default input example"
                   />
                 </div>
-                <div className="mb-3">
+                <div>
+                  <CFormLabel htmlFor="courseFee">
+                    Course Fees
+                  </CFormLabel>
+                  <CFormInput
+                    name='courseFee'
+                    id="courseFee"
+                    required
+                    type="number"
+                    min={1}
+                    value={updateItem.fees}
+                    onChange={(e) => setUpdateItem({ ...updateItem, fees: e.target.value })}
+                    placeholder="Enter Course Fees"
+                    aria-label="default input example"
+                  />
+                </div>
+                <div className='col-md-6'>
+                  <CFormLabel htmlFor="courseTime">
+                    Course Time
+                  </CFormLabel>
+                  <CFormInput
+                    name='courseTime'
+                    id="courseTime"
+                    required
+                    type="number"
+                    min={1}
+                    value={updateItem.course_time}
+                    onChange={(e) => setUpdateItem({ ...updateItem, course_time: e.target.value })}
+                    placeholder="Enter Course time"
+                    aria-label="default input example"
+                  />
+                </div>
+                <div className='col-md-6'>
+                  <CFormLabel htmlFor="courseTimeType">
+                    Select Course Time Type
+                  </CFormLabel>
+                  <CFormSelect defaultValue={updateItem.course_timeString} name='courseTimeType' id='courseTimeType' aria-label="Default select example">
+                    <option value="">Select Course Time Type</option>
+                    <option value={"day"}>Day</option>
+                    <option value={"month"}>Month</option>
+                    <option value={"year"}>Year</option>
+                  </CFormSelect>
+                </div>
+                <div>
                   <CFormLabel htmlFor="validationTextarea" className="form-label">
                     Description
                   </CFormLabel>
@@ -214,20 +279,20 @@ const ProductCategory = () => {
                     id="validationTextarea"
                     name="description"
                     placeholder="Description"
+                    // invalid
                     value={updateItem.description}
                     onChange={(e) => setUpdateItem({ ...updateItem, description: e.target.value })}
-                    // invalid
                     required
                   ></CFormTextarea>
                 </div>
                 <div className="mb-3">
-                  <CFormLabel htmlFor="validationTextarea">
+                  <CFormLabel htmlFor="catImage">
                     Select Image
                   </CFormLabel>
                   <CFormInput
                     name='catImage'
                     type="file"
-                    id="validationTextarea"
+                    id="catImage"
                     aria-label="file example"
                     required={!isEdit}
                   />
@@ -266,4 +331,4 @@ const ProductCategory = () => {
   )
 }
 
-export default ProductCategory
+export default Courses

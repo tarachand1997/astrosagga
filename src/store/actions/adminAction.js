@@ -51,7 +51,7 @@ export function deleteCategory(data, callBack) {
             url: `${URL.BASE_URL}${URL.DELETE_CATEGORY}`,
             headers: {
                 'Content-Type': 'application/json',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -73,7 +73,7 @@ export function addCategory(data, callBack) {
             url: `${URL.BASE_URL}${URL.ADD_CATEGORY}`,
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -95,7 +95,7 @@ export function updateCategory(data, callBack) {
             url: `${URL.BASE_URL}${URL.UPDATE_CATEGORY}`,
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -144,7 +144,7 @@ export function deleteSliders(data, callBack) {
             url: `${URL.BASE_URL}${URL.DELETE_SLIDER}`,
             headers: {
                 'Content-Type': 'application/json',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -166,7 +166,7 @@ export function addSliders(data, callBack) {
             url: `${URL.BASE_URL}${URL.ADD_SLIDER}`,
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -188,7 +188,7 @@ export function updateSliders(data, callBack) {
             url: `${URL.BASE_URL}${URL.UPDATE_SLIDER}`,
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -237,7 +237,7 @@ export function deleteAstrologer(data, callBack) {
             url: `${URL.BASE_URL}${URL.DELETE_ASTROLOGER}`,
             headers: {
                 'Content-Type': 'application/json',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -258,7 +258,7 @@ export function addAstrologer(data, callBack) {
             url: `${URL.BASE_URL}${URL.ADD_ASTROLOGER}`,
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -279,7 +279,7 @@ export function updateAstrologer(data, callBack) {
             url: `${URL.BASE_URL}${URL.UPDATE_ASTROLOGER}`,
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -327,7 +327,7 @@ export function deleteUsers(data, callBack) {
             url: `${URL.BASE_URL}${URL.DELETE_USERS}`,
             headers: {
                 'Content-Type': 'application/json',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -348,7 +348,7 @@ export function addUsers(data, callBack) {
             url: `${URL.BASE_URL}${URL.ADD_USERS}`,
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -369,7 +369,7 @@ export function updateUsers(data, callBack) {
             url: `${URL.BASE_URL}${URL.UPDATE_USERS}`,
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -417,7 +417,7 @@ export function deleteProductCategory(data, callBack) {
             url: `${URL.BASE_URL}${URL.DELETE_PRODUCTCATEGORY}`,
             headers: {
                 'Content-Type': 'application/json',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -439,7 +439,7 @@ export function addProductCategory(data, callBack) {
             url: `${URL.BASE_URL}${URL.ADD_PRODUCTCATEGORY}`,
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -461,7 +461,7 @@ export function updateProductCategory(data, callBack) {
             url: `${URL.BASE_URL}${URL.UPDATE_PRODUCTCATEGORY}`,
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -510,7 +510,7 @@ export function deleteBlog(data, callBack) {
             url: `${URL.BASE_URL}${URL.DELETE_BLOG}`,
             headers: {
                 'Content-Type': 'application/json',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -532,7 +532,7 @@ export function addBlog(data, callBack) {
             url: `${URL.BASE_URL}${URL.ADD_BLOG}`,
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -554,7 +554,7 @@ export function updateBlog(data, callBack) {
             url: `${URL.BASE_URL}${URL.UPDATE_BLOG}`,
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -603,7 +603,7 @@ export function deleteProducts(data, callBack) {
             url: `${URL.BASE_URL}${URL.DELETE_PRODUCTS}`,
             headers: {
                 'Content-Type': 'application/json',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -625,7 +625,7 @@ export function addProducts(data, callBack) {
             url: `${URL.BASE_URL}${URL.ADD_PRODUCTS}`,
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -647,7 +647,7 @@ export function updateProducts(data, callBack) {
             url: `${URL.BASE_URL}${URL.UPDATE_PRODUCTS}`,
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -696,7 +696,7 @@ export function deletePrivacyPolicy(data, callBack) {
             url: `${URL.BASE_URL}${URL.DELETE_PRIVACYPOLICY}`,
             headers: {
                 'Content-Type': 'application/json',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -718,7 +718,7 @@ export function addPrivacyPolicy(data, callBack) {
             url: `${URL.BASE_URL}${URL.ADD_PRIVACYPOLICY}`,
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -740,7 +740,7 @@ export function updatePrivacyPolicy(data, callBack) {
             url: `${URL.BASE_URL}${URL.UPDATE_PRIVACYPOLICY}`,
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -789,7 +789,7 @@ export function deleteTermCondition(data, callBack) {
             url: `${URL.BASE_URL}${URL.DELETE_TERMCONDITION}`,
             headers: {
                 'Content-Type': 'application/json',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -810,7 +810,7 @@ export function addTermCondition(data, callBack) {
             url: `${URL.BASE_URL}${URL.ADD_TERMCONDITION}`,
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -831,7 +831,7 @@ export function updateTermCondition(data, callBack) {
             url: `${URL.BASE_URL}${URL.UPDATE_TERMCONDITION}`,
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorizationkey': token
+                'Authorization': 'Bearer ' + token
             },
             data: data
         }).then(function (response) {
@@ -840,6 +840,96 @@ export function updateTermCondition(data, callBack) {
         }).catch(error => {
             callBack("error")
             console.warn("updateTermCondition", error);
+        });
+    }
+}
+
+export function getCourses() {
+    return async function (dispatch) {
+        // dispatch(changeLoading(true));
+        axios({
+            method: 'GET',
+            url: `${URL.BASE_URL}${URL.COURSES}`,
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Authorization': 'bearer ' + global.accessToken
+            },
+        }).then(function (response) {
+            let data = response?.data?.data;
+            dispatch(saveCourses(data))
+        }).catch(error => {
+            console.warn("getCourses", error);
+            // dispatch(changeLoading());
+        });
+    }
+}
+
+export function saveCourses(data) {
+    return {
+        type: types.GETCOURSES,
+        payload: data,
+    }
+}
+
+export function deleteCourses(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.DELETE_COURSES}`,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            data: data
+        }).then(function (response) {
+            callBack("success")
+            dispatch(getCourses())
+        }).catch(error => {
+            callBack("error")
+            console.warn("deleteCourses", error);
+        });
+    }
+}
+
+export function addCourses(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.ADD_COURSES}`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + token
+            },
+            data: data
+        }).then(function (response) {
+            callBack(response.data.message)
+            dispatch(getCourses())
+        }).catch(error => {
+            callBack("error")
+            console.warn("addCourses", error);
+        });
+    }
+}
+
+export function updateCourses(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.UPDATE_COURSES}`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + token
+            },
+            data: data
+        }).then(function (response) {
+            callBack(response.data.message)
+            dispatch(getCourses())
+        }).catch(error => {
+            callBack("error")
+            console.warn("updateCourses", error);
         });
     }
 }

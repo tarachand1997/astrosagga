@@ -3,33 +3,35 @@ import {
   CAvatar,
   CBadge,
   CDropdown,
-  CDropdownDivider,
-  CDropdownHeader,
+  // CDropdownDivider,
+  // CDropdownHeader,
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
 } from '@coreui/react'
 import {
-  cilBell,
-  cilCreditCard,
-  cilCommentSquare,
-  cilEnvelopeOpen,
-  cilFile,
-  cilLockLocked,
+  // cilBell,
+  // cilCreditCard,
+  // cilCommentSquare,
+  // cilEnvelopeOpen,
+  // cilFile,
+  // cilLockLocked,
   cilSettings,
-  cilTask,
+  // cilTask,
   cilUser,
 } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
-import { useSelector, useDispatch } from 'react-redux'
+// import { 
+  // useSelector, 
+  // useDispatch } from 'react-redux'
 
 import avatar8 from './../../assets/images/avatars/8.jpg'
-import { logout } from '../../store/actions/loginAction'
+// import { logout } from '../../store/actions/loginAction'
 import { useNavigate } from 'react-router-dom'
 
 const AppHeaderDropdown = () => {
   const navigate = useNavigate()
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userDetail');

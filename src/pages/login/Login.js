@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
 import {
   CButton,
   CCard,
@@ -12,6 +11,7 @@ import {
   CInputGroup,
   CInputGroupText,
   CRow,
+  CAlert
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
@@ -21,10 +21,10 @@ import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
   let navigate = useNavigate()
-  const loginData = useSelector((state) => state.login.loginData)
   const dispatch = useDispatch()
   const [useName, setUserName] = useState("")
   const [password, setPassword] = useState("")
+  const [loginError, setLoginError] = useState("")
 
   const handleUserName = (e) => {
     setUserName(e.target.value)
@@ -32,7 +32,12 @@ const Login = () => {
   const handlePassword = (e) => {
     setPassword(e.target.value)
   }
-  const redirectToDashboard = () => {
+  const redirectToDashboard = (res) => {
+    if (res) {
+      console.log("res", res);
+      setLoginError(res)
+      return;
+    }
     navigate("/admin/dashboard")
   }
   const handleLogin = () => {
@@ -40,7 +45,7 @@ const Login = () => {
       email: useName,
       password
     }
-    dispatch(login(apiData, () => redirectToDashboard()));
+    dispatch(login(apiData, (res) => redirectToDashboard(res)));
   }
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
@@ -53,6 +58,11 @@ const Login = () => {
                   <CForm>
                     <h1>Astrosagga</h1>
                     <p className="text-medium-emphasis">Sign In to your account</p>
+                    {
+                      loginError ? (
+                        <CAlert color="danger">{loginError}!</CAlert>
+                      ) : null
+                    }
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />

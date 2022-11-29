@@ -64,7 +64,7 @@ const TermCondition = () => {
           <strong className="me-auto">Term & Condition</strong>
           <small>Just now</small>
         </CToastHeader>
-        <CToastBody>{response == "error" ? "Term & Condition Deleted Failed" : "Term & Condition Deleted Successfully"}</CToastBody>
+        <CToastBody>{response === "error" ? "Term & Condition Deleted Failed" : "Term & Condition Deleted Successfully"}</CToastBody>
       </CToast>
     )
     addToast(successToast);

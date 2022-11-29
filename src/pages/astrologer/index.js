@@ -68,7 +68,7 @@ const Astrologer = () => {
           <strong className="me-auto">Astrologer</strong>
           <small>Just now</small>
         </CToastHeader>
-        <CToastBody>{response == "error" ? "Astrologer Deleted Failed" : "Astrologer Deleted Successfully"}</CToastBody>
+        <CToastBody>{response === "error" ? "Astrologer Deleted Failed" : "Astrologer Deleted Successfully"}</CToastBody>
       </CToast>
     )
     addToast(successToast);
@@ -180,7 +180,7 @@ const Astrologer = () => {
                         <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
                         <CTableDataCell>{item.name}</CTableDataCell>
                         <CTableDataCell>
-                          <img src={`${IMAGE_BASE_URL}${item.filePath}/${item.image}`} height="50" width="50" />
+                          <img alt='' src={`${IMAGE_BASE_URL}${item.filePath}/${item.image}`} height="50" width="50" />
                         </CTableDataCell>
                         <CTableDataCell>{item.experience}</CTableDataCell>
                         <CTableDataCell>{item.state}</CTableDataCell>
@@ -216,11 +216,11 @@ const Astrologer = () => {
                     Select Category
                   </CFormLabel>
 
-                  <CFormSelect name='astCategory' id='astCategory' aria-label="Default select example">
+                  <CFormSelect defaultValue={updateItem.catId} name='astCategory' id='astCategory' aria-label="Default select example">
                     <option value="">Select Category</option>
                     {
                       categoryList.map((item) => {
-                        return <option selected={updateItem.catId == item.id} key={item.id} value={item.id}>{item.name}</option>
+                        return <option key={item.id} value={item.id}>{item.name}</option>
                       })
                     }
                   </CFormSelect>

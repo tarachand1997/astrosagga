@@ -10,7 +10,7 @@ export function saveLoginData(data) {
 }
 
 const setLocalStorage = (loginData) => {
-    localStorage.setItem('token', loginData.data.api_access_token);
+    localStorage.setItem('token', loginData.access_token);
     localStorage.setItem('userDetail', JSON.stringify(loginData.data));
 }
 
@@ -31,7 +31,8 @@ export function login(data, callBack) {
             dispatch(saveLoginData(loginData))
             callBack()
         }).catch(error => {
-            console.warn("login", error);
+            console.warn("login", error.response);
+            callBack(error.response.data.message)
             // dispatch(changeLoading());
         });
     }

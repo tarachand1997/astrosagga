@@ -48,3 +48,8 @@ export const DELETE_PRODUCTS = "/remove-product"
 export const ADD_PRODUCTS = "/product"
 export const UPDATE_PRODUCTS = "/edit-product"
 
+export const COURSES = "/courses"
+export const DELETE_COURSES = "/delete-course"
+export const ADD_COURSES = "/courses"
+export const UPDATE_COURSES = "/courses-edit"
+
