@@ -1,5 +1,5 @@
-export const BASE_URL = "http://www.astrosagga.com/demo/api"
-export const IMAGE_BASE_URL = "http://www.astrosagga.com/demo"
+export const BASE_URL = "http://backend.astrosagga.com/api"
+export const IMAGE_BASE_URL = "http://backend.astrosagga.com"
 export const LOGIN = "/login"
 export const LOGOUT = "/userLogout"
 
