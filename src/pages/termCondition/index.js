@@ -143,7 +143,7 @@ const TermCondition = () => {
               tables look in CoreUI.
             </p> */}
             {/* <DocsExample href="components/table"> */}
-            <CTable>
+            <CTable responsive>
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col">Sr. No</CTableHeaderCell>

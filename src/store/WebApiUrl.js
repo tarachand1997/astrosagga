@@ -53,3 +53,6 @@ export const DELETE_COURSES = "/delete-course"
 export const ADD_COURSES = "/courses"
 export const UPDATE_COURSES = "/courses-edit"
 
+export const GET_VIDEO = "/course-videos?course_id="
+export const ADD_VIDEO = "/course-videos"
+export const DELETE_VIDEO = "/course-videos-delete"

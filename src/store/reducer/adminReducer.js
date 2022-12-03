@@ -11,7 +11,8 @@ const initialState = {
     productList: [],
     privacyPolicyList: [],
     termConditionList: [],
-    coursesList: []
+    coursesList: [],
+    videoList: []
 }
 
 const adminReducer = (state = initialState, action) => {
@@ -40,6 +41,8 @@ const adminReducer = (state = initialState, action) => {
             return { ...state, termConditionList: action.payload }
         case types.GETCOURSES:
             return { ...state, coursesList: action.payload }
+        case types.GETVIDEOS:
+            return { ...state, videoList: action.payload }
         default:
             return state
     }

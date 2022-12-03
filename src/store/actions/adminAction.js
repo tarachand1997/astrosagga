@@ -934,6 +934,74 @@ export function updateCourses(data, callBack) {
     }
 }
 
+export function getVideos(id) {
+    return async function (dispatch) {
+        // dispatch(changeLoading(true));
+        axios({
+            method: 'GET',
+            url: `${URL.BASE_URL}${URL.GET_VIDEO}${id}`,
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Authorization': 'bearer ' + global.accessToken
+            },
+        }).then(function (response) {
+            let data = response?.data?.data;
+            dispatch(saveVideos(data))
+        }).catch(error => {
+            console.warn("getVideos", error);
+            // dispatch(changeLoading());
+        });
+    }
+}
+
+export function saveVideos(data) {
+    return {
+        type: types.GETVIDEOS,
+        payload: data,
+    }
+}
+
+export function addVideo(data, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.ADD_VIDEO}`,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            data: data
+        }).then(function (response) {
+            callBack(response.data.message)
+        }).catch(error => {
+            callBack("error")
+            console.warn("addVideo", error);
+        });
+    }
+}
+
+export function deleteVideo(data, courseId, callBack) {
+    return async function (dispatch) {
+        let token = localStorage.getItem('token')
+        axios({
+            method: 'POST',
+            url: `${URL.BASE_URL}${URL.DELETE_VIDEO}`,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            data: data
+        }).then(function (response) {
+            callBack("success")
+            dispatch(getVideos(courseId))
+        }).catch(error => {
+            callBack("error")
+            console.warn("deleteVideo", error);
+        });
+    }
+}
+
 // export function getProducts() {
 //     return async function (dispatch) {
 //         // dispatch(changeLoading(true));

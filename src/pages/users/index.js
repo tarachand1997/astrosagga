@@ -153,7 +153,7 @@ const Users = () => {
               tables look in CoreUI.
             </p> */}
             {/* <DocsExample href="components/table"> */}
-            <CTable>
+            <CTable responsive>
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col">Sr. No</CTableHeaderCell>
@@ -353,7 +353,7 @@ const Users = () => {
                     type="file"
                     id="astImage"
                     aria-label="file example"
-                    required
+                    required={!isEdit}
                   />
                   {/* <CFormFeedback invalid>Category Image Required</CFormFeedback> */}
                 </div>
