@@ -27,16 +27,44 @@ const _nav = [
     },
   },
   {
-    component: CNavItem,
-    name: 'Category List',
-    to: '/admin/category',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+    component: CNavGroup,
+    name: 'Ecommerce',
+    to: '/ecommerce',
+    icon: <CIcon icon={cilCalculator} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Product Category List',
+        to: '/admin/product-category-list',
+        // icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+      },
+      {
+        component: CNavItem,
+        name: 'Product List',
+        to: '/admin/product-list',
+        // icon: <CIcon icon={cilCalculator} customClassName="nav-icon" />,
+      },
+    ],
   },
   {
-    component: CNavItem,
-    name: 'Astrologer List',
-    to: '/admin/astrologer-list',
+    component: CNavGroup,
+    name: 'Astrologer',
+    to: '/astrologer',
     icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Category List',
+        to: '/admin/category',
+        // icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+      },
+      {
+        component: CNavItem,
+        name: 'Astrologer List',
+        to: '/admin/astrologer-list',
+        // icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
+      },
+    ],
   },
   {
     component: CNavItem,
@@ -49,12 +77,6 @@ const _nav = [
     name: 'User List',
     to: '/admin/user-list',
     icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'Product Category List',
-    to: '/admin/product-category-list',
-    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
@@ -73,12 +95,6 @@ const _nav = [
     name: 'Term & condition List',
     to: '/admin/term-condition-list',
     icon: <CIcon icon={cilDescription} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'Product List',
-    to: '/admin/product-list',
-    icon: <CIcon icon={cilCalculator} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
